@@ -50,6 +50,8 @@
 			status = "okay";
 			compatible = "imu,multi-driver",
 				     "st,lsm6ds3h", "st,lsm6dse", "st,lsm6dso",
+				     "invensense,icm42607p",
+				     "invensense,icm42600",
 				     "invensense,icm40607";
 			reg = <0>;
 			spi-max-frequency = <8000000>;
