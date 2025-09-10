@@ -1,0 +1,109 @@
+/*
+ * Retro Remake Super5 OLED
+ *
+ * Copyright (c) 2020, CTCaer <ctcaer@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
+ *
+ */
+#include <dt-bindings/display/tegra-dc.h>
+#include <dt-bindings/display/tegra-panel.h>
+
+/ {
+	host1x {
+		dsi {
+			panel_rr_1080p_5_5: panel-rr-1080p-5-5 {
+				status = "okay";
+				compatible = "o,720-1280-6-0-01"; /* Compatible id must not change! */
+				/*
+				nvidia,edid = [
+						00 FF FF FF FF FF FF 00 28 89 10 0F 00 00 00 00
+						01 1A 01 03 80 08 0E 00 1A 00 00 00 00 00 00 00
+						00 00 00 00 00 00 01 01 01 01 01 01 01 01 01 01
+						01 01 01 01 01 01 78 1E D0 18 21 00 14 50 88 48
+						A1 00 4D 89 00 00 00 00 00 00 00 10 00 00 00 00
+						00 00 00 00 00 00 00 00 00 00 00 00 00 10 00 00
+						00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 10
+						00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 DD];
+				*/
+				nvidia,dsi-bl-name = "backlight";
+				nvidia,dsi-instance = <DSI_INSTANCE_0>;
+				nvidia,dsi-n-data-lanes = <4>;
+				nvidia,dsi-lp-cmd-mode-freq = <100000>;
+				nvidia,dsi-lp-read-cmd-mode-freq = <100000>;
+				nvidia,dsi-no-pkt-seq-eot;
+				nvidia,dsi-pixel-format = <TEGRA_DSI_PIXEL_FORMAT_24BIT_P>;
+				nvidia,dsi-refresh-rate = <60>;
+				nvidia,dsi-video-data-type = <TEGRA_DSI_VIDEO_TYPE_VIDEO_MODE>;
+				nvidia,dsi-video-clock-mode = <TEGRA_DSI_VIDEO_CLOCK_TX_ONLY>;
+				nvidia,dsi-video-burst-mode = <TEGRA_DSI_VIDEO_NONE_BURST_MODE>;
+				nvidia,dsi-virtual-channel = <TEGRA_DSI_VIRTUAL_CHANNEL_0>;
+				nvidia,dsi-panel-reset = <TEGRA_DSI_ENABLE>;
+				nvidia,dsi-power-saving-suspend = <TEGRA_DSI_ENABLE>;
+				nvidia,dsi-ulpm-not-support = <TEGRA_DSI_ENABLE>;
+				nvidia,dsi-phy-tlpx = <100>;
+				nvidia,dsi-phy-wakeup = <1970>;
+				nvidia,dsi-phy-taget = <450>;
+				nvidia,dsi-phy-tasure = <180>;
+				nvidia,dsi-phy-tago = <360>;
+				nvidia,dsi-init-cmd =
+					<TEGRA_DSI_PACKET_CMD DSI_DCS_WRITE_0_PARAM DSI_DCS_EXIT_SLEEP_MODE 0x00 0x0>,
+					<TEGRA_DSI_DELAY_MS 120>, //120ms
+					/* TODO, Do we need to find a way to set set_display_on after "operate DSI_A in video mode"? */
+					<TEGRA_DSI_PACKET_CMD DSI_DCS_WRITE_0_PARAM DSI_DCS_SET_DISPLAY_ON 0x00 0x0>,
+					<TEGRA_DSI_DELAY_MS 20>; //20ms
+				nvidia,dsi-n-init-cmd = <4>;
+				nvidia,dsi-suspend-cmd =
+					<TEGRA_DSI_PACKET_CMD DSI_DCS_WRITE_0_PARAM DSI_DCS_SET_DISPLAY_OFF 0x00 0x0>,
+					<TEGRA_DSI_DELAY_MS 50>, //40ms + 10ms
+					<TEGRA_DSI_PACKET_CMD DSI_DCS_LONG_WRITE 0x04 0x00 0x0
+						0xB9 0xFF 0x83 0x94
+						0x0 0x0>,
+					<TEGRA_DSI_DELAY_MS 5>, //5ms
+					<TEGRA_DSI_PACKET_CMD DSI_DCS_LONG_WRITE 0x0B 0x00 0x0
+						0xB1 0x48 0x15 0x75 0x09 0x32 0x14 0x71 0x31 0x4D 0x11
+						0x0 0x0>,
+					<TEGRA_DSI_DELAY_MS 5>, //5ms
+					<TEGRA_DSI_PACKET_CMD DSI_DCS_WRITE_0_PARAM DSI_DCS_ENTER_SLEEP_MODE 0x00 0x0>,
+					<TEGRA_DSI_DELAY_MS 50>; //50ms
+				nvidia,dsi-n-suspend-cmd = <8>;
+				disp-default-out {
+					nvidia,out-type = <TEGRA_DC_OUT_DSI>;
+					nvidia,out-width = <67>;
+					nvidia,out-height = <121>;
+					nvidia,out-flags = <TEGRA_DC_OUT_CONTINUOUS_MODE>;
+					nvidia,out-parent-clk = "pll_d_out0";
+					nvidia,out-xres = <1080>;
+					nvidia,out-yres = <1920>;
+					nvidia,out-rotation = <270>;
+				};
+				display-timings {
+					1080x1920-24 {
+						clock-frequency = <133710720>; /* (1080+26+38) x (1920+8+20) x 60 */
+						hactive = <1080>;
+						vactive = <1920>;
+
+						hfront-porch = <26>;
+						hback-porch = <34>;
+						hsync-len = <4>;
+
+						vfront-porch = <8>;
+						vback-porch = <16>;
+						vsync-len = <4>;
+
+						/* For DSI these are automatically calculated */
+						nvidia,h-ref-to-sync = <0>;
+						nvidia,v-ref-to-sync = <1>;
+					};
+				};
+			};
+		};
+	};
+};
