@@ -495,6 +495,10 @@
 				2193000
 				2295000
 				2397000
+				2499000
+				2601000
+				2703000
+				2805000
 			>;
 			max-safe-frequency = <1963500>;
 			max-frequency = <2295000>;
@@ -1288,7 +1292,8 @@
 		nvidia,force-mode = <1>;
 		nvidia,cf = <6>;
 		nvidia,ci = <0>;
-		nvidia,cg = <2>;
+		nvidia,cg = <4>; /* Adjusted for bigger lut */
+		nvidia,lut-max-size = <63>; /* Use max allowed lut size */
 		nvidia,i2c-fs-rate = <400000>;
 		nvidia,pmic-undershoot-gb = <0>; /* Use pmic default min */
 		/* nvidia,dfll-max-freq-khz = <1683000>; */
