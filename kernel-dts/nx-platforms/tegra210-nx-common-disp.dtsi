@@ -21,6 +21,9 @@
 #include "../nx-panels/panel-i-720p-5-5.dtsi"
 #include "../nx-panels/panel-s-720p-5-5.dtsi"
 #include "../nx-panels/panel-s-720p-7-0.dtsi"
+#include "../nx-panels/panel-rr-1080p-5-5.dtsi"
+#include "../nx-panels/panel-rr-1080p-7-0.dtsi"
+#include "../nx-panels/panel-rr-720p-5-5.dtsi"
 
 / {
 	backlight {
